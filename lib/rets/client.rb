@@ -42,6 +42,7 @@ module RETS
       base_url.gsub!(urls[:login].path, "") if urls[:login].path
 
       http = RETS::HTTP.new(args)
+      http.login_uri = urls[:login]
       http.request(:url => urls[:login], :check_response => true) do |response|
         rets_attr = Nokogiri::XML(response.body).xpath("//RETS")
         if rets_attr.empty?
@@ -66,8 +67,6 @@ module RETS
           end
         end
       end
-
-      http.login_uri = urls[:login]
 
       RETS::Base::Core.new(http, urls)
     end
